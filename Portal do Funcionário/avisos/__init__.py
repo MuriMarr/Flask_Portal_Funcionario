@@ -1,0 +1,1 @@
+from avisos.routes import avisos_bp

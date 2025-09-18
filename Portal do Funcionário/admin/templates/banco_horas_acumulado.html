@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-5">
+    <h3>Banco de Horas - Funcionários</h3>
+    
+    <table class="table table-bordered table-hover">
+        <thead>
+            <tr>
+                <th>Funcionário</th>
+                <th>Cargo</th>
+                <th>Saldo de Horas</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in relatorio %}
+            <tr>
+                <td>{{ item.funcionario.nome }}</td>
+                <td>{{ item.funcionario.cargo or "-" }}</td>
+                <td>{{ item.saldo }} horas</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

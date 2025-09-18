@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-5">
+    <h3>Banco de Horas - Funcionários</h3>
+    <p><strong>Saldo acumulado:</strong> {{ saldo }} horas</p>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Data</th>
+                <th>Entrada</th>
+                <th>Saída</th>
+                <th>Duração</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for p in pontos %}
+            <tr>
+                <td>{{ p.data.strftime("%d/%m/%Y") }}</td>
+                <td>{{ p.hora_entrada.strftime("%H:%M") if p.hora_entrada else "-" }}</td>
+                <td>{{ p.hora_saida.strftime("%H:%M") if p.hora_saida else "-" }}</td>
+                <td>
+                    {% if p.hora_entrada and p.hora_saida %}
+                        {{ ((datetime.combine(p.data, p.hora_saida) - datetime.combine(p.data, p.hora_entrada)).seconds // 3600) }}
+                    {% else %}
+                        -
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

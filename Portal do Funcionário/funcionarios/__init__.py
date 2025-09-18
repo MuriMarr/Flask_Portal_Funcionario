@@ -1,0 +1,1 @@
+from funcionarios.routes import funcionarios_bp

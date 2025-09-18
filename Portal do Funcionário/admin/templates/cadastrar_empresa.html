@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% block title %}Cadastrar Empresa{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Cadastrar Nova Empresa</h2>
+    <form method="POST">
+        <div class="mb-3">
+            <label for="nome" class="form-label">Nome da Empresa</label>
+            <input type="text" class="form-control" id="nome" name="nome" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="telefone" class="form-label">CNPJ</label>
+            <input type="text" class="form-control" id="cnpj" name="cnpj" placeholder="00.000.000/0000-00" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="endereco" class="form-label">Endereço</label>
+            <input type="text" class="form-control" id="endereco" name="endereco" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="telefone" class="form-label">Telefone da Empresa</label>
+            <input type="text" class="form-control" id="telefone" name="telefone" placeholder="(xx) XXXX-XXXX">
+        </div>
+        
+        <div class="mb-3">
+            <label for="email" class="form-label">E-mail de Contato</label>
+            <input type="email" class="form-control" id="email" name="email">
+        </div>
+        
+        <button type="submit" class="btn btn-primary">Cadastrar Empresa</button>
+        <a href="{{ url_for('admin.dashboard') }}" class="btn btn-secondary">Cancelar</a>
+    </form>
+</div>
+{% endblock %}

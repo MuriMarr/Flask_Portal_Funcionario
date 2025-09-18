@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-4">
+    <h2>Administradores</h2>
+    <a href="{{ url_for('superadmin.novo_admin') }}" class="btn btn-primary mb-3">Novo Admin</a>
+
+    <div class="row">
+        {% for admin in admins %}
+        <div class="col-md-4 mb-3">
+            <div class="card company-card">
+                <div class="card-body">
+                    <h5>{{ admin.nome }}</h5>
+                    <p class="muted">{{ admin.email }}</p>
+                    <p class="muted">Empresa: {{ admin.empresa.nome if admin.empresa else '-' }}</p>
+                    <div class="mt-3">
+                        <a href="{{ url_for('superadmin.editar_admin', id=admin.id) }}" class="btn btn-sm btn-primary">Editar</a>
+                        <form method="POST" action="{{ url_for('superadmin.excluir_admin', id=admin.id) }}" style="display:inline;">
+                            <button type="submit" class="btn btn-sm btn-outline-danger">Excluir</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

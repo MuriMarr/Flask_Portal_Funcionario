@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Holerite - {{ funcionario.nome }}</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; font-size: 14px; color: #333; }
+        h1 { text-align: center; margin-bottom: 10px; }
+        .empresa, .funcionario { margin-bottom: 20px; }
+        .empresa p, .funcionario p { margin-bottom: 2px 0; }
+        .section-title { background: #f2f2f2; padding: 6px; font-weight: bold; }
+        table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
+        th, td { padding: 0px; border: 1px solid #ccc; }
+        th { background: #fafafa ; }
+        .right { text-align: right; }
+        .total { font-weight: bold; }
+        .assinatura { margin-top: 40px; text-align: center; }
+        .assinatura span { display: block; margin-top: 60px; border-top: 1px solid #000; width: 250px; margin-right: auto; }
+    </style>
+</head>
+<body>
+    <h1>Holerite</h1>
+
+    <div class="empresa">
+        <div class="section-title">Empresa</div>
+        <p><strong>Nome:</strong> {{ funcionario.empresa.nome }}</p>
+        <p><strong>CNPJ:</strong> {{ funcionario.empresa.cnpj }}</p>
+        <p><strong>Endereço:</strong> {{ funcionario.empresa.endereco }}</p>
+    </div>
+
+    <div class="funcionario">
+        <div class="section-title">Funcionário</div
+        <p><strong>Nome:</strong> {{ funcionario.nome }}</p>
+        <p><strong>Email:</strong> {{ funcionario.email }}
+        <p><strong>Mês:</strong> {{ mes }}</p>
+        <p><strong>Dias Trabalhados:</strong> {{ dias }}</p>
+        <p><strong>Horas Trabalhadas:</strong> {{ horas }}</p>
+        <p><strong>Salário Base Contrato:</strong> R$ {{ "%.2f"|format(salario_base) }}</p>
+        <p><strong>Valor Hora:</strong> R$ {{ "%.2f"|format(funcionario.salario_mensal / funcionario.empresa.carga_mensal) }}</p>
+    </div>
+
+    <div class="section-title">Vencimentos
+    <table>
+        <tr>
+            <th>Descrição</th>
+            <th class="right">Valor (R$)</th>
+        </tr>
+        <tr>
+            <td>Salário Base Proporcional</td>
+            <td class="right">{{ "%.2f"|format(valor_base) }}</td>
+        </tr>
+        <tr>
+            <td>Horas Extras</td>
+            <td class="right">{{ "%.2f"|format(valor_extras) }}</td>
+        </tr>
+        <tr class="total">
+            <td>Total Bruto</td>
+            <td class="right">{{ "%.2f"|format(bruto) }}</td>
+        </tr>
+    </table>
+
+    <div class="section-title">Descontos</div>
+    <table>
+        <tr>
+            <th>Descrição</th>
+            <th class="right">Valor (R$)</th>
+        </tr>
+        <tr>
+            <td>INSS (8%)</td>
+            <td class="right">- {{ "%.2f"|format(desconto_inss) }}</td>
+        </tr>
+        <tr>
+            <td>Vale Transporte (5%)</td>
+            <td class="right">- {{ "%.2f"|format(desconto_vt) }}</td>
+        </tr>
+        <tr class="total">
+            <td>Total Descontos</td>
+            <td class="right">- {{ "%.2f"|format(desconto_inss + desconto_vt) }}</td>
+        </tr>
+    </table>
+
+    <div class="section-title">Resumo</div>
+    <table>
+        <tr class="total">
+            <td>Salário Líquido</td>
+            <td class="right">R$ {{ "%.2f"|format(valor_liquido) }}</td>
+        </tr>
+    </table>
+
+    <div class="assinatura">
+        <p>_______________________________________</p>
+        <span>Assinatura do Funcionário</span>
+    </div>
+</body>
+</html>

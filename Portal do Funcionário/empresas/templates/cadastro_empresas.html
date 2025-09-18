@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-4">
+    <h2>
+        {% if empresa %} Editar Empresa 
+        {% else %} Cadastrar Nova Empresa 
+        {% endif %}
+    </h2>
+
+    <form method="POST">
+        <div class="mb-3">
+            <label for="nome" class="form-label">Nome da Empresa</label>
+            <input type="text" class="form-control" id="nome" name="nome" value="{{ empresa.nome if empresa else '' }}" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="cnpj" class="form-label">CNPJ</label>
+            <input type="text" class="form-control" id="cnpj" name="cnpj" value="{{ empresa.cnpj if empresa else '' }}" required>
+        </div>
+        
+        <button type="submit" class="btn btn-primary">
+            {% if empresa %} Atualizar Empresa 
+            {% else %} Cadastrar Empresa 
+            {% endif %}
+    </form>
+</div>
+{% endblock %}

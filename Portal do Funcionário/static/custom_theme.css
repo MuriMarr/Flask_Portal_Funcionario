@@ -1,0 +1,323 @@
+:root{
+  --brand-1: #e4e4e4;     /* background deep */
+  --brand-2: #1e3a8a;     /* primary blue */
+  --accent:  #ffbf69;     /* accent warm */
+  --muted:   #ffffff;
+  --card-bg: rgba(92, 92, 92, 0.96);
+  --glass: rgba(255,255,255,0.06);
+  --glass-2: rgba(15,23,42,0.6);
+  --success: #28a745;
+  --danger:  #dc3545;
+  --radius-lg: 14px;
+  --radius-md: 8px;
+  --shadow-soft: 0 8px 30px rgba(2,6,23,0.12);
+  --shadow-raise: 0 12px 40px rgba(2,6,23,0.16);
+  --transition-fast: 210ms cubic-bezier(.2,.9,.2,1);
+  --transition-mid: 360ms cubic-bezier(.2,.9,.2,1);
+}
+
+/* ----------------
+   Reset / base
+   ---------------- */
+body {
+  background: linear-gradient(90deg, rgba(15,23,42,0.95) 0%, rgba(15,23,42,0.85) 100%);
+  color: #e6eef6;
+  -webkit-font-smoothing:antialiased;
+  font-family: "Inter", "Segoe UI", system-ui, -apple-system, "Roboto", "Helvetica", "Arial", sans-serif;
+}
+
+/* Make container feel lighter on dark background */
+.container, .card, .modal-content {
+  color: var(--brand-1);
+}
+
+/* ----------------
+   Navbar tweaks
+   ---------------- */
+.navbar {
+  background: linear-gradient(90deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02));
+  border-bottom: 1px solid rgba(255,255,255,0.03);
+  backdrop-filter: blur(6px);
+}
+
+.navbar-brand {
+  letter-spacing: .4px;
+  color: var(--accent) !important;
+  font-weight: 700;
+}
+
+/* ----------------
+   Buttons
+   ---------------- */
+.btn {
+  border-radius: 10px;
+  font-weight: 600;
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast), opacity var(--transition-fast);
+  box-shadow: 0 6px 18px rgba(2,6,23,0.06);
+}
+
+.btn-primary {
+  background: linear-gradient(180deg, var(--brand-2), #1646b0);
+  border: none;
+  color: white;
+}
+
+.btn-primary:hover, .btn-success:hover, .btn-outline-warning:hover, .btn-outline-danger:hover, .btn-outline-success:hover, .btn-outline-info:hover, .btn-primary:focus {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-raise);
+  opacity: 0.98;
+}
+
+.btn-outline-secondary {
+  background: transparent;
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,0.06);
+}
+
+/* subtle micro-interaction for icon buttons */
+.btn-icon {
+  padding: .45rem .6rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ----------------
+   Cards (core visual)
+   ---------------- */
+.card {
+  background: linear-gradient(180deg, rgba(107, 107, 107, 0.98), rgba(109, 109, 109, 0.96));
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-soft);
+  border: 0;
+  transition: transform var(--transition-mid), box-shadow var(--transition-mid);
+  overflow: hidden;
+}
+
+/* Card hover elevation + gentle lift */
+.card:hover {
+  transform: translateY(-8px) scale(1.01);
+  box-shadow: var(--shadow-raise);
+}
+
+/* Card header styles */
+.card .card-title {
+  font-weight: 700;
+  color: var(--brand-1);
+}
+
+/* small meta in cards */
+.card .muted {
+  color: var(--muted);
+  font-size: .9rem;
+}
+
+.dashboard-container {
+  margin-top: 80px;
+}
+/* ----------------
+   Hero metric cards (superadmin dashboard)
+   ---------------- */
+.metric-card {
+  border-radius: 12px;
+  color: white;
+  padding: 1.1rem;
+  min-height: 90px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.metric-card h5 { font-size: .95rem; margin:0; opacity:.95; }
+.metric-card h3 { font-size: 1.6rem; margin-top:.4rem; font-weight:800; }
+
+/* variants */
+.metric-card.primary { background: linear-gradient(135deg, #1e3a8a, #2b6be6); }
+.metric-card.success { background: linear-gradient(135deg, #20c997, #2bb673); color:#042b1b; }
+.metric-card.warn { background: linear-gradient(135deg, #ffbd59, #ff9f1c); color:#2b1600; }
+.metric-card.info { background: linear-gradient(135deg,#3bd5ff,#1fa6d9); color:#05232b; }
+
+/* small stat sparkline placeholder */
+.metric-card .small-meta { opacity: .9; font-weight:600; }
+
+/* ----------------
+   Company card (superadmin)
+   ---------------- */
+.company-card {
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+  border-radius: 12px;
+  padding: 1rem;
+  min-height: 200px;
+  background: linear-gradient(180deg, var(--card-bg), #353434);
+}
+
+/* subtle brand tag */
+.company-card .tag {
+  display:inline-block;
+  padding: .25rem .6rem;
+  border-radius: 999px;
+  font-size:.8rem;
+  font-weight:700;
+  color: var(--brand-1);
+  background: rgba(255,191,105,0.15);
+}
+
+/* footer */
+footer {
+  font-size: 14px;
+  background-color: #212529;
+  color: #bbb;
+  width: 100%;
+}
+
+.company-card .footer {
+  font-size: .85rem;
+  color: var(--muted);
+}
+
+/* action buttons area */
+.company-card .actions a, .company-card .actions form{
+  margin-right: .4rem;
+}
+
+.company-card .btn {
+  pointer-events: auto !important;
+  transform: none !important;
+}
+
+/* ----------------
+   Table tweaks
+   ---------------- */
+.table {
+  background: transparent;
+  color: var(--brand-1);
+  border-radius: 10px;
+  overflow: hidden;
+}
+.table thead th {
+  background: rgba(20,20,20,0.03);
+  color: var(--brand-1);
+}
+
+/* ----------------
+   Form controls
+   ---------------- */
+.form-control:focus, .form-select:focus {
+  border-color: rgba(30,58,138,0.9);
+  box-shadow: 0 6px 18px rgba(30,58,138,0.08);
+  outline: none;
+}
+
+/* inputs with icon */
+.input-icon { position: relative; }
+.input-icon .icon {
+  position: absolute; left: 10px; top: 50%; transform: translateY(-50%); opacity:.6;
+}
+.input-icon .form-control { padding-left:36px; }
+
+/* ----------------
+   Alerts
+   ---------------- */
+.alert {
+  border-radius: 10px;
+  padding: .75rem 1rem;
+}
+
+/* ----------------
+   Tiny animations
+   ---------------- */
+.fade-in {
+  opacity: 0;
+  transform: translateY(6px);
+  animation: fadeInUp 600ms ease forwards;
+}
+@keyframes fadeInUp {
+  to { opacity:1; transform: none; }
+}
+
+/* subtle tilt effect for cards (3D) */
+.tilt {
+  transform-style: preserve-3d;
+  perspective: 900px;
+  transition: transform 300ms ease;
+}
+.tilt:hover {
+  transform: rotateX(3deg) rotateY(-3deg) translateY(-6px);
+}
+
+/* reveal on scroll helper */
+.reveal { opacity:0; transform: translateY(16px); transition: all 540ms cubic-bezier(.2,.9,.2,1); }
+.reveal.visible { opacity:1; transform:none; }
+
+/* ----------------
+   Utilities
+   ---------------- */
+.u-muted { color: var(--muted) !important; }
+.u-uppercase { text-transform: uppercase; letter-spacing: .6px; font-weight:700; font-size:.78rem; }
+.p-hero { padding: 2rem 1.2rem; }
+
+/* responsive small fixes */
+@media (max-width: 767px){
+  .metric-card h3 { font-size: 1.2rem; }
+  .company-card { min-height: 170px; }
+
+}
+.navbar, .navbar.fixed-top, .navbar.sticky-top {
+  position: relative; /* se já for fixed, manter */
+  z-index: 6000;      /* valor alto para ficar acima de cards */
+}
+
+/* Força o dropdown a ficar sempre por cima */
+.dropdown-menu {
+  position: absolute;      /* padrão, reforça */
+  z-index: 7000 !important; /* MUST be higher than cards' stacking contexts */
+}
+
+/* Quando o dropdown estiver aberto (classe show) */
+.dropdown-menu.show {
+  z-index: 7000 !important;
+}
+
+/* Modera z-index de cards e alerts para não concorrer com dropdown */
+.card, .company-card, .metric-card {
+  z-index: 0; /* evita que criem camadas acima do dropdown */
+}
+
+/* Alerts devem aparecer acima do conteúdo mas abaixo do dropdown */
+.alert {
+  position: relative;
+  z-index: 1200;
+}
+
+/* Modera o tilt para não "puxar" o elemento pra cima demais */
+.tilt {
+  z-index: 0;
+  will-change: transform;
+}
+
+/* Caso use modal, garantir que fique acima de tudo */
+.modal, .modal-backdrop {
+  z-index: 8000 !important;
+}
+
+/* Pequeno ajuste para quando o dropdown for gerado fora da navbar
+   (em projetos com Popper que anexam ao body): */
+body .dropdown-menu {
+  z-index: 7000 !important;
+}
+
+html, body {
+  height: auto !important;
+  overflow-y: auto !important;
+}
+
+.card, .container, main {
+  max-height: none !important;
+  overflow: visible !important;
+}
+
+body {
+  padding-bottom: 100px;
+}

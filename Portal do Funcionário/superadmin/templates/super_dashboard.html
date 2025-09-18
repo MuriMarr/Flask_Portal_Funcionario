@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container text-center mt-4">
+    <h2>Painel do Superadmin</h2>
+    
+    <div class="row mb-4">
+        <div class="col-md-3 reveal">
+            <div class="metric-card primary">
+                <h5>Empresas</h5>
+                <h3>{{ total_empresas }}</h3>
+            </div>
+        </div>
+    <div class="col-md-3 reveal">
+        <div class="metric-card success">
+            <h5>Admins</h5>
+            <h3>{{ total_admins }}</h3>
+        </div>
+    </div>
+    <div class="col-md-3 reveal">
+        <div class="metric-card warn">
+            <h5>Funcionários</h5>
+            <h3>{{ total_funcionarios }}</h3>
+        </div>
+    </div>
+    <div class="col-md-3 reveal">
+        <div class="metric-card info">
+            <h5>Horas Extras</h5>
+            <h3>{{ total_extras }}</h3>
+        </div>
+    </div>
+    <div class="row mt-4">
+        <div class="col-md-6">
+            <a href="{{ url_for('superadmin.listar_empresas') }}" class="btn btn-lg btn-primary w-100 mb-3">
+                <i class="bi bi-buildings"></i> Gerenciar Empresas
+            </a>
+        </div>
+        <div class="col-md-6">
+            <a href="{{ url_for('superadmin.listar_admins') }}" class="btn btn-lg btn-secondary w-100 mb-3">
+                <i class="bi bi-person-gear"></i>Gerenciar Admins
+            </a>
+        </div>
+    </div>            
+    <div class="row">
+        {% for empresa in empresas %}
+        <div class="col-md-4 mt-4 reveal">
+            <div class="card company-card">
+                <div>
+                    <h5 class="card-title">{{ empresa.nome }}</h5>
+                    <span class="tag">{{ empresa.cnpj }}</span>
+                    <p class="muted mt-2">Carga mensal: {{ empresa.carga_mensal }}h</p>
+                    <p class="muted">E-mail: {{ empresa.email }}</p>
+                </div>
+                <div class="actions mt-3">
+                    <a href="{{ url_for('superadmin.editar_empresa', id=empresa.id) }}" class="btn btn-sm btn-primary">Editar</a>
+                    <form method="POST" action="{{ url_for('superadmin.excluir_empresa', id=empresa.id) }}" style="display:inline;">
+                        <button type="submit" class="btn btn-sm btn-outline-secondary">Excluir</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

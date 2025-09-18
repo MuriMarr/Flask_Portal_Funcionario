@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-4">
+    <h2>Funcionários da Empresa {{ empresa.nome }}</h2>
+
+    <form method="POST" class="mb-3">
+        <label for="funcionario_id" class="form-label">Adicionar Funcionário</label>
+        <select name="funcionario_id" id="funcionario_id" class="form-select" required>
+            {% for f in funcionarios if f.empresa_id != empresa.id%}
+            <option value="{{ f.id }}">{{ f.nome }} ({{ f.email }})</option>
+            {% endfor %}
+        </select>
+        <button type="submit" class="btn btn-primary mt-2">➕ Vincular</button>
+    </form>
+
+    <h4>Funcionários já vinculados</h4>
+    {% if empresa.funcionarios %}
+        <ul class="list-group">
+            {% for f in empresa.funcionarios %}
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    {{ f.nome }} ({{ f.email }})
+                    <a href="{{ url_for('empresas.remover_vinculo', empresa=empresa.id, user_id=f.id) }}" class="btn btn-danger btn-sm" onclick="return confirm('Tem certeza que deseja remover {{ f.nome }} da empresa?');">🗑 Remover Vínculo</a>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>Nenhum funcionário vinculado a esta empresa.</p>
+    {% endif %}
+</div>
+{% endblock %}

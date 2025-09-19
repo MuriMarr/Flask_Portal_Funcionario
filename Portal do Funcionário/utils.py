@@ -90,49 +90,16 @@ def calcular_trct(funcionario, data_demissao):
         'total_liquido': total_liquido
     }
 
-def calcular_banco_horas_acumulado(usuario, ate_data=None):
-    if ate_data is None:
-        ate_data = datetime.now()
-    
-    registros = (Ponto.query
-            .filter(Ponto.user_id == usuario.id)
-            .filter(Ponto.data <= ate_data.date())
-            .order_by(Ponto.data)
-            .all()
-    )
-
-    total_trabalhadas = timedelta()
-    historico_mensal = {}
-    saldo_acumulado = timedelta()
-
-    carga_mensal_horas = usuario.empresa.carga_mensal or 220
-    carga_mensal = timedelta(hours=carga_mensal_horas)
-
-    for r in registros:
-        if r.hora_entrada and r.hora_saida:
-            entrada = datetime.combine(r.data, r.hora_entrada)
-            saida = datetime.combine(r.data, r.hora_saida)
-            trabalhado = saida - entrada
-            total_trabalhadas += trabalhado
-
-            mes = r.data.strftime("%Y-%m")
-            if mes not in historico_mensal:
-                historico_mensal[mes] = {"total_trabalhadas": timedelta(), "saldo": timedelta()}
-            
-            historico_mensal[mes]["total_trabalhadas"] += trabalhado
-    
-    for mes, dados in historico_mensal.items():
-        saldo_mes = dados["total_trabalhadas"] - carga_mensal
-        historico_mensal[mes]["saldo"] = saldo_mes
-        saldo_acumulado += saldo_mes
-
-    return {
-        "total_trabalhadas": total_trabalhadas,
-        "saldo_acumulado": saldo_acumulado,
-        "historico_mensal": historico_mensal
-    }
 def validar_cnpj(cnpj: str) -> bool:
     return bool(re.fullmatch(r"\d{14}", cnpj))
 
 def validar_cpf(cpf: str) -> bool:
     return bool(re.fullmatch(r"\d{11}", cpf))
+
+def format_timedelta(td):
+    if not td:
+        return "00:00"
+    total_seconds = int(td.total_seconds())
+    horas, resto = divmod(total_seconds, 3600)
+    minutos, _ = divmod(resto, 60)
+    return f"{horas:02}:{minutos:02}"

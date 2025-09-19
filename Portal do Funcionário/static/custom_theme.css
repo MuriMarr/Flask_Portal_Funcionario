@@ -62,7 +62,7 @@ body {
   color: white;
 }
 
-.btn-primary:hover, .btn-success:hover, .btn-outline-warning:hover, .btn-outline-danger:hover, .btn-outline-success:hover, .btn-outline-info:hover, .btn-primary:focus {
+.btn-primary:hover, .btn-secondary:hover, .btn-success:hover, .btn-outline-warning:hover, .btn-outline-danger:hover, .btn-outline-success:hover, .btn-outline-info:hover, .btn-primary:focus {
   transform: translateY(-3px);
   box-shadow: var(--shadow-raise);
   opacity: 0.98;

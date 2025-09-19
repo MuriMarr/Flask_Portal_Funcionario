@@ -1,12 +1,12 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash, abort, make_response
 from flask_login import login_required, current_user
 from werkzeug.security import generate_password_hash
-from datetime import datetime, timedelta, timezone
+from datetime import date, datetime, timedelta, timezone
 import os, pdfkit
 
 from extensions import db
-from models import User, Ponto, Marcacao
-from utils import validar_cpf, admin_required, monthrange, to_time, log_action, calcular_banco_horas_acumulado, calcular_trct
+from models import User, Ponto, Marcacao, calcular_horas_ponto
+from utils import validar_cpf, admin_required, monthrange, calcular_trct
 
 admin_bp = Blueprint("admin", __name__, url_prefix="/admin", template_folder="templates")
 
@@ -133,15 +133,92 @@ def excluir_funcionario(id):
     flash('Funcionário excluído com sucesso.', 'success')
     return redirect(url_for('admin.funcionarios'))
 
-@admin_bp.route("/banco_horas_acumulado/<int:id>")
+@admin_bp.route('/banco_horas/mensal/<int:usuario_id>')
 @login_required
-@admin_required
-def banco_horas_acumulado(id):
-    usuario = User.query.get_or_404(id)
+def banco_horas_mensal(usuario_id):
+    funcionario = User.query.get_or_404(usuario_id)
 
-    resultado = calcular_banco_horas_acumulado(usuario)
+    hoje = datetime.today().date()
+    inicio_mes = date(hoje.year, hoje.month, 1)
 
-    return render_template("funcionarios/banco_horas_acumulado.html", funcionario=usuario, resultado=resultado)
+    pontos = (
+        Ponto.query
+        .filter(Ponto.usuario_id == usuario_id, Ponto.data >= inicio_mes)
+        .order_by(Ponto.data.asc())
+        .all()
+    )
+
+    saldo_total = timedelta()
+    extras_total = timedelta()
+    deficit_total = timedelta()
+
+    resultados = []
+
+    for ponto in pontos:
+        resultado = calcular_horas_ponto(ponto, carga_diaria=timedelta(hours=8))
+
+        saldo_total += resultado["saldo"]
+        extras_total += resultado["extras"]
+        deficit_total += resultado["deficit"]
+
+        resultados.append({
+            "data": ponto.data,
+            "total_trabalhado": resultado["total_trabalhado"],
+            "saldo": resultado["saldo"],
+            "extras": resultado["extras"],
+            "deficit": resultado["deficit"],
+        })
+
+    return render_template(
+        "banco_horas_mensal.html",
+        funcionario=funcionario,
+        resultados=resultados,
+        saldo_total=saldo_total,
+        extras_total=extras_total,
+        deficit_total=deficit_total
+    )
+
+@admin_bp.route('/banco_horas/acumulado/<int:usuario_id>')
+@login_required
+def banco_horas_acumulado(usuario_id):
+    funcionario = User.query.get_or_404(usuario_id)
+
+    pontos = (
+        Ponto.query
+        .filter(Ponto.usuario_id == usuario_id)
+        .order_by(Ponto.data.asc())
+        .all()
+    )
+
+    saldo_total = timedelta()
+    extras_total = timedelta()
+    deficit_total = timedelta()
+
+    resultados = []
+
+    for ponto in pontos:
+        resultado = calcular_horas_ponto(ponto, carga_diaria=timedelta(hours=8))
+
+        saldo_total += resultado["saldo"]
+        extras_total += resultado["extras"]
+        deficit_total += resultado["deficit"]
+
+        resultados.append({
+            "data": ponto.data,
+            "total_trabalhado": resultado["total_trabalhado"],
+            "saldo": resultado["saldo"],
+            "extras": resultado["extras"],
+            "deficit": resultado["deficit"],
+        })
+
+    return render_template(
+        "banco_horas_acumulado.html",
+        funcionario=funcionario,
+        resultados=resultados,
+        saldo_total=saldo_total,
+        extras_total=extras_total,
+        deficit_total=deficit_total
+    )
  
 @admin_bp.route('/trct_pdf/<int:id>')
 @login_required
@@ -223,7 +300,7 @@ def historico_funcionario(id):
             'saldo': str(saldo) if saldo else '—'
         })
 
-    return render_template('historico_funcionario.html', registros=lista, saldo_total=str(saldo_total), mes_atual=f"{ano}-{mes:02d}")
+    return render_template('historico_funcionario.html', funcionario=funcionario.nome, registros=lista, saldo_total=str(saldo_total), mes_atual=f"{ano}-{mes:02d}")
 
 @admin_bp.route('/funcionario/<int:id>/holerite')
 @login_required

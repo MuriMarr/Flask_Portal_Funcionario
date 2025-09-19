@@ -81,7 +81,7 @@ def historico():
     registros = Ponto.query.filter(Ponto.user_id == current_user.id, Ponto.data >= inicio, Ponto.data <= fim).order_by(Ponto.data.desc()).all()
     
     jornada_padrao = timedelta(hours=current_user.empresa.carga_mensal / 22 / 5)
-    saldo_total = timedelta(hours=0, minutes=0)
+    saldo_total = timedelta()
     lista = []
 
     for r in registros:
@@ -99,11 +99,11 @@ def historico():
             'data': r.data,
             'entrada': marcacoes[0].hora.strftime("%H:%M") if marcacoes else '—',
             'saida': marcacoes[-1].hora.strftime("%H:%M") if len(marcacoes) > 1 else '—',
-            'horas_trabalhadas': str(trabalhadas) if trabalhadas else '—',
+            'horas_trabalhadas': trabalhadas if trabalhadas else '—',
             'saldo': str(saldo) if saldo else '—'
         })
 
-    return render_template('historico.html', registros=lista, saldo_total=str(saldo_total), mes_atual=f"{ano}-{mes:02d}")
+    return render_template('historico.html', registros=lista, saldo_total=saldo_total, mes_atual=f"{ano}-{mes:02d}")
 
 @funcionarios_bp.route('/banco_horas')
 @login_required

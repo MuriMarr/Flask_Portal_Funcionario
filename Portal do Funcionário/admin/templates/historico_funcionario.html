@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% block title %}Histórico - {{ funcionario }}{% endblock %}
+{% block content %}
+
+<h2 class="mb-3">Histórico de {{ funcionario }}</h2>
+
+<form method="GET" class="row g-3 mb-4">
+    <div class="col-auto">
+        <label for="mes" class="form-label">Filtrar por mês:</label>
+        <input type="month" id="mes" name="mes" class="form-control" value="{{ mes_atual }}">
+    </div>
+    <div class="col-auto align-self-end">
+        <button type="submit" class="btn btn-primary">Filtrar</button>
+        <a href="{{ url_for('admin.historico_funcionario', id=current_user.id) }}" class="btn btn-secondary">Limpar</a>
+    </div>
+</form>
+
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>Data</th>
+            <th>Entrada</th>
+            <th>Saída</th>
+            <th>Horas Trabalhadas</th>
+            <th>Saldo</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for r in registros %}
+        <tr>
+            <td>{{ r.data }}</td>
+            <td>{{ r.entrada }}</td>
+            <td>{{ r.saida }}</td>
+            <td>{{ r.horas_trabalhadas }}hrs</td>
+            <td>{{ r.saldo }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<div class="alert alert-info">
+    <strong>Banco de Horas/Horas Extras do Mês:</strong> {{ saldo_total }}
+</div>
+
+<a href="{{ url_for('admin.funcionarios') }}" class="btn btn-secondary">Voltar</a>
+
+{% endblock %}

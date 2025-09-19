@@ -6,6 +6,7 @@ from extensions import db, migrate, login_manager
 from models import User
 from dotenv import load_dotenv
 from db_seed import run_seed
+from utils import format_timedelta
 
 load_dotenv()
 CHAVE_SECRETA_ADMIN = os.environ.get('CHAVE_SECRETA_ADMIN', 'admin@1234')
@@ -14,6 +15,7 @@ def create_app():
     app = Flask(__name__)
     app.config.from_object(Config)
     app.cli.add_command(run_seed)
+    app.jinja_env.filters['format_timedelta'] = format_timedelta
 
     db.init_app(app)
     migrate.init_app(app, db)

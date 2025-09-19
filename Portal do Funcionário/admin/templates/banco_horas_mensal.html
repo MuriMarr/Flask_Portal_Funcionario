@@ -1,12 +1,12 @@
 {% extends "base.html" %}
 {% block content %}
 <div class="container mt-4">
-    <h2>Banco de Horas (Acumulado) - {{ funcionario.nome }}</h2>
+    <h2>Banco de Horas - {{ funcionario.nome }}</h2>
 
-    <div class="alert alert-primary">
-        <strong>Saldo acumulado:</strong> {{ saldo_total }} <br>
-        <strong>Total de horas extras:</strong> {{ extras_total }} <br>
-        <strong>Total de déficit:</strong> {{ deficit_total }}
+    <div class="alert alert-info">
+        <strong>Saldo total:</strong> {{ saldo_total }} <br>
+        <strong>Extras acumuladas:</strong> {{ extras_total }} <br>
+        <strong>Déficit acumulado:</strong> {{ deficit_total }}
     </div>
 
     <table class="table">

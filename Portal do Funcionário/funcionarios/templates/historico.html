@@ -33,7 +33,7 @@
             <td>{{ r.data }}</td>
             <td>{{ r.entrada or '—' }}</td>
             <td>{{ r.saida or '—' }}</td>
-            <td>{{ r.horas_trabalhadas }}</td>
+            <td>{{ r.horas_trabalhadas|format_timedelta }}hrs</td>
             <td>{{ r.saldo_dia }}</td>
         </tr>
         {% endfor %}
@@ -41,9 +41,12 @@
 </table>
 
 <div class="alert alert-info">
-    <strong>Banco de Horas/Horas Extras Acumulados:</strong> {{ saldo_total }}
+    <strong>Banco de Horas/Horas Extras Acumulados:</strong> {{ saldo_total|format_timedelta }}hrs
 </div>
+{% if current_user == 'admin' %}
+<a href="{{ url_for('admin.dashboard') }}" class="btn btn-primary">Voltar ao Painel</a>
+{% else %}
+<a href="{{ url_for('funcionarios.dashboard') }}" class="btn btn-primary">Voltar ao Dashboard</a>
 
-<a href="{{ url_for('funcionarios.dashboard') }}" class="btn btn-primary">Voltar ao Painel</a>
-
+{% endif %}
 {% endblock %}

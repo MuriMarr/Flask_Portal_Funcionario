@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block title %}Mural de Avisos{% endblock %}
+{% block content %}
+<h2>Mural de Avisos</h2>
+<hr>
+{% for aviso in avisos %}
+<div class="card mb-4">
+    <div class="card-body">
+        <h5 class="card-title">{{ aviso.titulo }}</h5>
+        <p class="card-text">{{ aviso.conteudo }}</p>
+        <form method="POST" action="{{ url_for('avisos.deletar_aviso', aviso_id=aviso.id) }}" onsubmit="return confirm('Tem certeza que deseja deletar este aviso?');">
+            <button type="submit" class="btn btn-danger btn-sm">🗑 Deletar Aviso</button>
+        {% if aviso.imagem %}
+        <img src="{{ aviso.imagem }}" class="img-fluid mt-2" alt="Imagem do aviso">
+        {% endif %}
+        <p class="text-white mt-2"><small>Publicado em {{ aviso.criado_em.strftime('%Y/%m/%d %H:%M') }}</small></p>
+    </div>
+</div>
+{% endfor %}
+{% endblock %}

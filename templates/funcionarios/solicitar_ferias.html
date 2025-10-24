@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-4">
+    <h2>Solicitar Férias</h2>
+
+    <form method="POST">
+        <div class="mb-3">
+            <label for="data_inicio" class="form-label">Data de Início</label>
+            <input type="date" class="form-control" id="data_inicio" name="data_inicio" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="data_fim" class="form-label">Data de Fim</label>
+            <input type="date" class="form-control" id="data_fim" name="data_fim" required>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Enviar Solicitação</button>
+        <a href="{{ url_for('funcionarios.minhas_ferias') }}" class="btn btn-secondary">Cancelar</a>
+    </form>
+</div>
+{% endblock %}

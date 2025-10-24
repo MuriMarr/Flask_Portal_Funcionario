@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-4">
+    <h2>Solicitações de Férias</h2>
+
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>Funcionário</th>
+                <th>Data Início</th>
+                <th>Data Fim</th>
+                <th>Dias</th>
+                <th>Status</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for f in solicitacoes %}
+            <tr>
+                <td>{{ f.funcionario.nome }}</td>
+                <td>{{ f.data_inicio.strftime('%d/%m/%Y') }}</td>
+                <td>{{ f.data_fim.strftime('%d/%m/%Y') }}</td>
+                <td>{{ f.dias }}</td>
+                <td>
+                    {% if f.status == "APROVADO" %}
+                        <span class="badge bg-success">Aprovado</span>
+                        <a href="{{ url_for('admin.gerar_pdf_ferias', ferias_id=f.id) }}" class="btn btn-secondary btn-sm">📄 Recibo</a>
+                    {% elif f.status == "REJEITADO" %}
+                        <span class="badge bg-danger">Rejeitado</span>
+                    {% else %}
+                        <span class="badge bg-warning text-dark">Pendente</span>
+                    {% endif %}
+                </td>
+                <td>
+                    {% if f.status == "PENDENTE" %}
+                        <a href="{{ url_for('admin.aprovar_ferias', ferias_id=f.id) }}" class="btn btn-success btn-sm">✔ Aprovar</a>
+                        <a href="{{ url_for('admin.rejeitar_ferias', ferias_id=f.id) }}" class="btn btn-danger btn-sm">✖ Rejeitar</a>
+                    {% else %}
+                        —
+                    {% endif %}
+                </td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="6" class="text-center">Nenhuma solicitação encontrada.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

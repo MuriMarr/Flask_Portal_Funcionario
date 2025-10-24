@@ -1,0 +1,94 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container dashboard-container mt-3">
+    <h2 class="text-center mb-4">Painel do Administrador</h2>
+    <hr>
+
+    <div class="text-central mb-4">
+        <button class="btn btn-primary" onclick="mostrarSecao('principais')">📊 Visão Geral</button>
+        <button class="btn btn-secondary" onclick="mostrarSecao('funcionarios')">👥 Funcionários</button>
+    </div>
+
+    <div id="secao-principais">
+        <div class="row text-center">
+            <div class="col-md-4 mb-4">
+                <div class="card bg-light p-4 shadow-sm">
+                    <h5>Funcionários Ativos</h5>
+                    <hr>
+                    <p class="display-6">{{ total_funcionarios }}</p>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card bg-light p-4 shadow-sm">
+                    <h5>Registros no Mês</h5>
+                    <hr>
+                    <p class="display-6">{{ total_registros }}</p>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card bg-light p-4 shadow-sm">
+                    <h5>Horas Trabalhadas</h5>
+                    <hr>
+                    <p class="display-6">{{ total_horas|format_timedelta }}</p>
+                </div>
+            </div>
+        </div>
+        <h3>Funcionários ainda no Expediente</h3>
+        {% if pendentes %}
+            <ul>
+                {% for p in pendentes %}
+                    <li>{{ p.user_id }} - Entrada: {{ p.data }}</li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>Nenhum funcionário pendente.</p>
+        {% endif %}
+
+    <div id="secao-funcionarios" seyle="display:none;">
+        <div class="row">
+            {% for f in funcionarios %}
+            <div class="col-md-4 mb-4">
+                <div class="card shadow-sm h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ f.nome }}</h5>
+                        <p class="card-text">
+                            <strong>Cargo:</strong> {{ f.cargo or 'Não definido' }}<br>
+                            <strong>Email:</strong> {{ f.email }}
+                        </p>
+                        <div class="d-flex justify-content-between">
+                            <a href="{{ url_for('admin.banco_horas_mensal', usuario_id=f.id) }}" 
+                            class="btn btn-outline-primary btn-sm">
+                            📊 Banco de Horas
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="text-center mt-4">
+        <a href="{{ url_for('admin.registrar_ponto') }}" class="btn btn-outline-success">➕ Registrar Ponto</a>
+        {% if ponto %}
+        <ul>
+            {% for marcacao in current_user.pontos[-1].marcacoes %}
+                <li>{{ marcacao.tipo }} - {{ marcacao.hora.strftime("%H:%M") }}</li>
+            {% endfor %}
+        {% endif %}
+        </ul>
+        <a href="{{ url_for('avisos.mural') }}" class="btn btn-outline-info"> 👁 Ver Avisos</a>
+        <a href="{{ url_for('avisos.criar_aviso') }}" class="btn btn-outline-warning">⚠ Criar Aviso</a>
+        <a href="{{ url_for('admin.funcionarios') }}" class="btn btn-primary">👥 Ver Funcionários</a>
+        <a href="{{ url_for('admin.novo_funcionario') }}" class="btn btn-success">➕ Cadastrar Funcionário</a>
+        <a href="{{ url_for('admin.listar_solicitacoes_ferias') }}" class="btn btn-secondary">🌴 Solicitações de Férias</a>
+        <a href="{{ url_for('auth.logout') }}" class="btn btn-outline-danger mt-2">⛔ Sair</a>
+    </div>
+</div>
+<script>
+    function mostrarSecao(secao) {
+        document.getElementById('secao-funcionarios').style.display = secao === 'funcionarios' ? 'block' : 'none';
+        document.getElementById('secao-principais').style.display = secao === 'principais' ? 'block' : 'none';
+    }
+</script>
+{% endblock %}

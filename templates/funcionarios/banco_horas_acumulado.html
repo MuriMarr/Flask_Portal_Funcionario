@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-4">
+    <h2>Banco de Horas (Acumulado)</h2>
+
+    <div class="row mt-4">
+        <div class="col-md-4">
+            <div class="alert alert-info text-center">
+                <h5>Saldo Total</h5>
+                <h3>{{ saldo_total|format_timedelta }}</h3>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="alert alert-success text-center">
+                <h5>Horas Extras</h5>
+                <h3>{{ extras_total|format_timedelta }}</h3>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="alert alert-danger text-center">
+                <h5>Déficit Total</h5>
+                <h3>{{ deficit_total|format_timedelta }}</h3>
+            </div>
+        </div>
+    </div>
+
+    <hr>
+
+    <h4>Histórico de Registros</h4>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Data</th>
+                <th>Horas Trabalhadas</th>
+                <th>Saldo</th>
+                <th>Extras</th>
+                <th>Déficit</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for r in resultados %}
+            <tr>
+                <td>{{ r.data.strftime("%d/%m/%Y") }}</td>
+                <td>{{ r.total_trabalhado|format_timedelta }}</td>
+                <td>{{ r.saldo|format_timedelta }}</td>
+                <td>{{ r.extras|format_timedelta }}</td>
+                <td>{{ r.deficit|format_timedelta }}</td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="5" class="text-center">Nenhum registro encontrado.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="mt-3">
+        <a href="{{ url_for('funcionarios.dashboard') }}" class="btn btn-secondary">⬅ Voltar</a>
+    </div>
+</div>
+{% endblock %}

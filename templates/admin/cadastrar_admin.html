@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block title %}Cadastrar Administrador{% endblock %}
+{% block content %}
+<h2>Atualização de acesso de Usuário</h2>
+<form method="POST">
+    <div class="mb-3">
+        <label for="funcionario_id" class="form-label">Selecione o Funcionário</label>
+        <select class="form-select" name="funcionario_id" required>
+            {% for funcionario in funcionarios %}
+                <option value="{{ funcionario.id }}">{{ funcionario.nome }} - {{ funcionario.cargo }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <button type="submit" class="btn btn-success">Promover</button>
+    <a href="{{ url_for('admin.dashboard') }}" class="btn btn-secondary">Cancelar</a>
+</form>
+{% endblock %}

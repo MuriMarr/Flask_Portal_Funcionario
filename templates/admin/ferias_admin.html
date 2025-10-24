@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% block title %}Férias de {{ funcionario.nome }}{% endblock %}
+{% block content %}
+
+<div class="container mt-4">
+    <div class="d-flex-justify-content-between align-items-center mb-4">
+        <h2>Gestão de Férias - {{ funcionario.nome }}</h2>
+
+    <div class="mb-4">
+        <a href="{{ url_for('admin.nova_ferias', usuario_id=funcionario.id) }}" class="btn btn-success">➕ Registrar Férias</a>
+        <a href="{{ url_for('admin.funcionarios') }}" class="btn btn-secondary">⬅ Voltar</a>
+    </div>
+
+    {% if ferias_list %}
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Período</th>
+                <th>Dias</th>
+                <th>Adiantamento</th>
+                <th>Valor Bruto</th>
+                <th>INSS</th>
+                <th>IRRF</th>
+                <th>Valor Líquido</th>
+                <th>Status</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for f in ferias_list %}
+            <tr>
+                <td>{{ f.inicio.strftime("%d/%m/%Y") }} - {{ f.fim.strftime("%d/%m/%Y") }}</td>
+                <td>{{ f.dias }}</td>
+                <td>{{ "Sim" if f.adiantamento_decimo else "Não" }}</td>
+                <td>R$ {{ "{:,.2f}".format(f.valor_bruto) }}</td>
+                <td>R$ {{ "{:,.2f}".format(f.desconto_inss) }}</td>
+                <td>R$ {{ "{:,.2f}".format(f.desconto_irrf) }}</td>
+                <td><strong>R$ {{ "{:,.2f}".format(f.valor_liquido) }}</strong></td>
+                <td>
+                    {% if f.aprovado %}
+                        <span class="badge bg-success">Aprovado</span>
+                    {% else %}
+                        <span class="badge bg-warning text-dark">Pendente</span>
+                    {% endif %}
+                </td>
+                <td>
+                    <div class="d-flex gap-2 justify-content-center flex-wrap">
+                        <a href="{{ url_for('admin.gerar_ferias_pdf_admin', usuario_id=funcionario.id, ferias_id=f.id) }}" class="btn btn-sm btn-primary">📄 Gerar PDF</a>
+                        <a href="{{ url_for('admin.editar_ferias', usuario_id=funcionario.id, ferias_id=f.id) }}" class="btn btn-sm btn-warning">✏ Editar</a>
+                        <a href="{{ url_for('admin.excluir_ferias', usuario_id=funcionario.id, ferias_id=f.id) }}" class="btn btn-sm btn-danger" onclick="return confirm('Tem certeza que deseja excluir este registro de férias?')">🗑 Excluir</a>
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+        <div class="alert alert-info">Nenhum registro de férias encontrado para este funcionário.</div>
+    {% endif %}
+</div>
+
+{% endblock %}

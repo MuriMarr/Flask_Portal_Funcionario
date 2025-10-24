@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}Novas Férias - {{ funcionario.nome }}{% endblock %}
+{% block content %}
+<div class="container mt-4">
+    <h2>Registrar Férias - {{ funcionario.nome }}</h2>
+    <p class="text-muted">Preencha os campos abaixo para registrar manualmente as férias do funcionário.</p>
+
+    <form method="POST">
+        <div class="mb-3">
+            <label for="inicio" class="form-label">Data de Início</label>
+            <input type="date" class="form-control" id="inicio" name="inicio" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="fim" class="form-label">Data Final</label>
+            <input type="date" class="form-control" id="fim" name="fim" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="dias" class="form-label">Quantidade de Dias</label>
+            <input type="number" class="form-control" id="dias" name="dias" min="5" max="30" required>
+        </div>
+
+        <div class="form-check mb-3">
+            <input class="form-check-input" type="checkbox" id="adiantamento_decimo" name="adiantamento_decimo">
+            <label class="form-check-label" for="adiantamento_decimo">
+                Adiantamento do 13º salário
+            </label>
+        </div>
+
+        <button type="submit" class="btn btn-success">Salvar</button>
+        <a href="{{ url_for('admin.ferias_funcionario', usuario_id=funcionario.id) }}" class="btn btn-secondary">Cancelar</a>
+    </form>
+</div>
+{% endblock %}

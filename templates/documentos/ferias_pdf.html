@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lng="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Recibo de Férias</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+            font-size: 14px;
+        }
+        h1, h2, h3 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .info, .valores {
+            margin-bottom: 25px;
+        }
+        .info p, .valores p {
+            margin: 5px 0;
+        }
+        .total {
+            font-weight: bold;
+            font-size: 16px;
+            margin-top: 20px;
+        }
+        hr {
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Recibo de Férias</h1>
+
+    <div class="info">
+        <p><strong>Nome do Funcionário:</strong> {{ funcionario.nome }}</p>
+        <p><strong>CPF:</strong> {{ funcionario.cpf or '-' }}</p>
+        <p><strong>Email:</strong> {{ funcionario.email }}</p>
+        <p><strong>Período de Férias:</strong> {{ ferias.data_inicio.strftime('%d/%m/%Y') }} a {{ ferias.data_fim.strftime('%d/%m/%Y') }}</p>
+        <p><strong>Dias de Férias:</strong> {{ ferias_calc.dias_ferias }}</p>
+    </div>
+
+    <hr>
+
+    <div class="valores">
+        <p><strong>Salário Mensal:</strong> R$ {{ "%.2f"|format(ferias_calc.salario_base) }}</p>
+        <p><strong>Valor das Férias:</strong> R$ {{ "%.2f"|format(ferias_calc.valor_ferias) }}</p>
+        <p><strong>Adicional Constitucional (1/3):</strong> R$ {{ "%.2f"|format(ferias_calc.adicional_ferias) }}</p>
+        <p><strong>Bruto:</strong> R$ {{ "%.2f"|format(ferias_calc.bruto) }}</p>
+    </div>
+
+    <hr>
+
+    <div class="valores">
+        <p><strong>Descontos:</strong></p>
+        <p><strong>INSS: -R$ {{ "%.2f"|format(ferias_calc.desconto_inss) }}</strong></p>
+        <p><strong>IRRF: -R$ {{ "%.2f"|format(ferias_calc.desconto_irrf) }}</strong></p>
+        <p><strong>VT (6%): -R$ {{ "%.2f"|format(ferias_calc.desconto_vt) }}</strong></p>
+        <p class="total">Total de Descontos: R$ {{ "%.2f"|format(ferias_calc.total_descontos) }}</p>
+    </div>
+    
+    {% if ferias_calc.adiantamento_decimo and ferias_calc.adiantamento_decimo > 0 %}
+    <hr>
+    <div class="valores">
+        <p><strong>Adiantamento 13º Salário:</strong> R$ {{ "%.2f"|format(ferias_calc.adiantamento_decimo) }}</p>
+    </div>
+    {% endif %}
+    
+    <hr>
+    
+    <p class="total">Total Líquido a Receber: <strong>R$ {{ "%.2f"|format(ferias_calc.liquido) }}</strong></p>
+    
+    <br><br>
+    <p><strong>Assinatura do Empregador:</strong> ________________________________</p>
+    <p><strong>Assinatura do Funcionário:</strong> ________________________________</p>
+    <p><strong>Data:</strong> ____/____/______</p>
+</body>
+</html>

@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-3" style="max-width: 500px">
+    <h3 class="mb-3">Editar Funcionário</h3>
+    <hr>
+    <form method="POST">
+        <div class="mb-3">
+            <label>Nome</label>
+            <input type="text" name="nome" class="form-control" value="{{ funcionario.nome }}" required>
+        </div>  
+
+        <div class="mb-3">
+            <label>Email</label>
+            <input type="email" name="email" class="form-control" value="{{ funcionario.email }}" required>
+        </div>
+        <hr>
+        <h3 class="mb-3">Dados Cadastrais</h3>
+        <hr>
+        <div class="mb-3">
+            <label for="data_nascimento" class="form-label">Data de Nascimento</label>
+            <input type="date" class="form-control" id="data_nascimento" name="data_nascimento" value="{{ funcionario.data_nascimento.strftime('%Y-%m-%d') if funcionario.data_nascimento else '' }}" required>
+        </div>
+    
+        <div class="mb-3">
+            <label for="cpf" class="form-label">CPF</label>
+            <input type="text" class="form-control" id="cpf" name="cpf" required maxlength="14" placeholder="000.000.000-00">
+        </div>
+
+        <div class="mb-3">
+            <label for="cargo" class="form-label">Cargo</label>
+            <input type="text" class="form-control" id="cargo" name="cargo" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="salario_mensal" class="form-label">Salário Mensal (R$ - Bruto)</label>
+            <input type="number" class="form-control" id="salario_mensal" name="salario_mensal" required>
+        </div>
+        <hr>
+        <button type="submit" class="btn btn-primary">Salvar</button>
+        <a href="{{ url_for('admin.funcionarios') }}" class="btn btn-secondary">Cancelar</a>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-4">
+  <h2>Lista de Empresas</h2>
+  <a href="{{ url_for('superadmin.nova_empresa') }}" class="btn btn-primary mb-3">Nova Empresa</a>
+  
+  <div class="row">
+    {% for empresa in empresas %}
+    <div class="col-md-4 mb-3">
+      <div class="card company-card">
+        <div class="card-body">
+          <h5 class="card-title">{{ empresa.nome }}</h5>
+          <p class="muted">CNPJ: {{ empresa.cnpj }}</p>
+          <p class="muted">Email: {{ empresa.email or '—' }}</p>
+          <p class="muted">Carga mensal: {{ empresa.carga_mensal or 220 }}h</p>
+          <div class="mt-3">
+            <a href="{{ url_for('superadmin.editar_empresa', id=empresa.id) }}" class="btn btn-sm btn-primary">Editar</a>
+            <form method="POST" action="{{ url_for('superadmin.excluir_empresa', id=empresa.id) }}" style="display:inline;">
+              <button type="submit" class="btn btn-sm btn-outline-danger">Excluir</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+    <a href="{{ url_for('superadmin.dashboard') }}" class="btn btn-sm btn-secondary">Voltar ao Painel</a>
+  </div>
+</div>
+{% endblock %}

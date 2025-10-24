@@ -1,0 +1,100 @@
+{% extends 'base.html' %}
+{% block title %}Painel Do Funcionário{% endblock %}
+{% block content %}
+
+<div class="container text-center mt-4">
+    <h2 class="mb-3">Painel do Funcionário</h2>
+    <p>Bem-vindo, <strong>{{ current_user.nome }}</strong>!</p>
+
+    <div class="row mt-4">
+        <div class="col-md-3">
+            <div class="metric-card primary">
+                <h5>Horas Trabalhadas</h5>
+                <h3>{{ horas_trabalhadas }}h</h3>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="metric-card success">
+                <h5>Horas Extras</h5>
+                <h3>{{ horas_extras }}h</h3>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="metric-card warn">
+                <h5>Banco de Horas</h5>
+                <h3>{{ banco_horas }}h</h3>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="metric-card info">
+                <h5>Próximo Pagamento</h5>
+                <h3>R$ {{ "{:,.2f}".format(proximo_pagamento) }}</h3>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-5">
+        <div class="col-md-6">
+            <h4>Horas Trabalhadas</h4>
+            <canvas id="graficoHoras"></canvas>
+        </div>
+        <div class="col-md-6">
+            <h4>Horas Extras por Semana</h4>
+            <canvas id="graficoExtras"></canvas>
+        </div>
+    </div>
+
+    <div class="mt-5">
+        <h4>Histórico de Marcações (últimos registros)</h4>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Data</th>
+                    <th>Marcações</th>
+                    <th>Horas Trabalhadas</th>
+                    <th>Saldo</th>
+                    <th>Extras</th>
+                    <th>Déficit</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for r in registros %}
+                <tr>
+                    <td>{{ r.data.strftime("%d/%m/%Y") }}</td>
+                    <td>{{ r.horarios or "-" }}</td>
+                    <td>{{ r.total_trabalhado|format_timedelta }}</td>
+                    <td>{{ r.saldo|format_timedelta }}</td>
+                    <td>{{ r.extras|format_timedelta }}</td>
+                    <td>{{ r.deficit|format_timedelta }}</td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="6" class="text-center">Nenhum registro encontrado.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="text-center mt-4">
+    <button id="registrarPonto" data-url="{{ url_for('funcionarios.registrar_ponto') }}" class="btn btn-success">➕ Registrar Ponto</button>
+    <a href="{{ url_for('funcionarios.meus_registros') }}" class="btn btn-secondary">📋 Meus Registros</a>
+    <a href="{{ url_for('avisos.mural') }}" class="btn btn-info"> 👁 Ver Avisos</a>
+    <a href="{{ url_for('funcionarios.historico') }}" class="btn btn-primary">👥 Ver Histórico</a>
+    <a href="{{ url_for('auth.logout') }}" class="btn btn-outline-danger">⛔ Sair</a>
+    <a href="{{ url_for('funcionarios.minhas_ferias') }}" class="btn btn-warning">🌴 Minhas Férias</a>
+</div>
+
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    window.funcionarioData = {
+        semanas: {{ semanas|tojson }},
+        horas_semanais: {{ horas_semanais|tojson }},
+        extras_semanais: {{ extras_semanais|tojson }}
+    };
+</script>
+<script src="{{ url_for('static', filename='js/funcionario_dashboard.js') }}"></script>
+<script src="{{ url_for('static', filename='js/saldo_highlight.js') }}"></script>
+{% endblock %}

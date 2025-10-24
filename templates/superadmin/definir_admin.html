@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-5">
+    <h2>Definir Admin para {{ empresa.nome }}</h2>
+    
+    {% if funcionarios %}
+    <form method="POST" action="{{ url_for('superadmin.definir_admin', id=empresa.id) }}">
+        <div class="mb-3">
+            <label for="admin_id" class="form-label">Selecione o Funcionário</label>
+            <select name="admin_id" id="admin_id" class="form-control" required>
+                {% for f in funcionarios %}
+                <option value="{{ f.id }}" {% if empresa.admin_id == f.id %}selected{% endif %}>
+                    {{ f.nome }} - ({{ f.email }})
+                </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <button type="submit" class="btn btn-success">Definir como Admin</button>
+        <a href="{{ url_for('superadmin.dashboard') }}" class="btn btn-secondary">Cancelar</a>
+    </form>
+    {% else %}
+        <div class="alert alert-info">
+            Nenhum funcionário cadastrado nesta empresa. Cadastre funcionarios primeiro para definir um admin.
+        </div>
+        <a href="{{ url_for('superadmin.dashboard') }}" class="btn btn-secondary">Voltar</a>
+    {% endif %}
+</div>
+{% endblock %}

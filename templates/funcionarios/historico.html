@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+{% block title %}Histórico de Pontos{% endblock %}
+{% block content %}
+
+<h2 class="mb-3">Histórico de Pontos - {{ current_user.nome }}</h2>
+
+<form method="GET" class="row g-3 mb-4">
+    <div class="col-auto">
+        <label for="mes" class="form-label">Filtrar por Mês:</label>
+        <input type="month" id="mes" name="mes" class="form-control" value="{{ mes_atual }}">
+    </div>
+    <div class="col-auto align-self-end">
+        <button type="submit" class="btn btn-primary">Filtrar</button>
+        <a href="{{ url_for('funcionarios.historico') }}" class="btn btn-secondary">Limpar Filtro</a>
+    </div>
+</form>
+
+<a href="{{ url_for('funcionarios.holerite', mes=mes_atual) }}" class="btn btn-outline-primary mb-3">Baixar Holerite em PDF</a>
+
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>Data</th>
+            <th>Entrada</th>
+            <th>Saída Almoço</th>
+            <th>Retorno Almoço</th>
+            <th>Saída</th>
+            <th>Horas Trabalhadas</th>
+            <th>Saldo</th>
+            <th>Extras</th>
+            <th>Déficit</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for r in registros %}
+        <tr>
+            <td>{{ r.data }}</td>
+            <td>{{ r.entrada or '—' }}</td>
+            <td>{{ r.saida_almoco or '—' }}</td>
+            <td>{{ r.retorno_almoco or '—' }}</td>
+            <td>{{ r.saida or '—' }}</td>
+
+            <td class="saldo-cell" data-tipo="horas">
+                {{ r.horas_trabalhadas|format_timedelta }}
+            </td>
+            <td class="saldo-cell" data-tipo="saldo">
+                {{ r.saldo|format_timedelta }}
+            </td>
+            <td class="saldo-cell" data-tipo="extras">
+                {{ r.extras|format_timedelta }}
+            </td>
+            <td class="saldo-cell" data-tipo="deficit">
+                {{ r.deficit|format_timedelta }}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<div class="alert alert-info saldo-cell" data-tipo="saldo">
+    <strong>Banco de Horas/Horas Extras Acumulados:</strong> {{ saldo_total|format_timedelta }}
+</div>
+<div class="alert alert-success saldo-cell" data-tipo="extras">
+    <strong>Total de Horas Extras Acumuladas:</strong> {{ extras_total|format_timedelta }}
+</div>
+<div class="alert alert-danger saldo-cell" data-tipo="deficit">
+    <strong>Total de Déficit Acumulado:</strong> {{ deficit_total|format_timedelta }}
+</div>
+
+{% if current_user == 'admin' %}
+<a href="{{ url_for('admin.dashboard') }}" class="btn btn-primary">Voltar ao Painel</a>
+{% elif current_user == 'funcionario' %}
+<a href="{{ url_for('funcionarios.dashboard') }}" class="btn btn-primary">Voltar ao Dashboard</a>
+
+{% endif %}
+{% endblock %}

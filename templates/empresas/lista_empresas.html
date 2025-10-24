@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-4">
+    <h2>Empresas Cadastradas</h2>
+    <a href="{{ url_for('empresas.nova_empresa') }}" class="btn btn-success mb-3">➕ Cadastrar Nova Empresa</a>
+    {% if empresas %}
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Nome</th>
+                    <th>CNPJ</th>
+                    <th>Ações</th>
+                    <th>Quantidade de Funcionários</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for empresa in empresas %}
+                <tr>
+                    <td>{{ empresa.nome }}</td>
+                    <td>{{ empresa.cnpj }}</td>
+                    <td>
+                        <a href="{{ url_for('empresas.editar_empresa', empresa_id=empresa.id) }}" class="btn btn-primary btn-sm">✏ Editar</a>
+                        <form action="{{ url_for('empresas.deletar_empresa', empresa_id=empresa.id) }}" method="POST" style="display:inline;">
+                            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Tem certeza que deseja deletar esta empresa?');">🗑 Deletar</button>
+                        </form>
+                    </td>
+                    <td>
+                        {{ empresa.funcionarios|length }} Funcionário(s) <br>
+                        <a href="{{ url_for('empresas.gerenciar_funcionarios', empresa_id=empresa.id) }}" class="btn btn-info btn-sm mt-1">👥 Gerenciar Funcionários</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>Nenhuma empresa cadastrada.</p>
+    {% endif %}
+</div>
+{% endblock %}
